@@ -27,6 +27,6 @@ app.get('/project', function(req, res) {
 });
 */
 
-app.listen(8080, function(){
-  console.log("ready captain.");
+app.listen(app.get('port'), function(){
+  console.log("ready captain." + app.get('port'));
 });
