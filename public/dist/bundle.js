@@ -3943,7 +3943,8 @@
 	function loadProjects() {
 	    return function (dispatch, getState) {
 	        // read from storage
-	        var objects = JSON.parse(localStorage.getItem("projects")).projects || [];
+	        var json = JSON.parse(localStorage.getItem("projects"));
+	        var objects = json ? json.projects : [];
 	        var projects = [];
 	        // restore objects
 	        for (var i = 0; i < objects.length; i++) {
@@ -4373,7 +4374,7 @@
 
 	        var _this = _possibleConstructorReturn(this, (IssueApiService.__proto__ || Object.getPrototypeOf(IssueApiService)).call(this));
 
-	        _this.api_url = 'http://zhaw-web3-issue-tracker-api.herokuapp.com/api/project/';
+	        _this.api_url = 'https://zhaw-web3-issue-tracker-api.herokuapp.com/api/project/';
 	        return _this;
 	    }
 

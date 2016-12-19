@@ -14,7 +14,8 @@ module.exports = {
 function loadProjects() {
     return function(dispatch,getState) {
         // read from storage
-        var objects = JSON.parse(localStorage.getItem("projects")).projects || [];
+        var json = JSON.parse(localStorage.getItem("projects"));
+        var objects = json ? json.projects : [];
         var projects = [];
         // restore objects
         for (var i = 0; i < objects.length; i++) {
