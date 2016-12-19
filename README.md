@@ -1,37 +1,21 @@
 # Web 3 - Issue Tracker
 *Author: Daniel Milenkovic (milendan)*
 
-Simple issue tracker project created as part of the web3 lectures. 
-Build with node.
+Simple issue tracker project created as part of the web3 lectures and to try out new technologies.
+Build with node, riot, redux, webpack and sass.
+
+https://intense-springs-83919.herokuapp.com/
 
 ## Setup 
 
-The project is build with npm/gulp:
+The project is build with npm/webpack:
 ```shell
 // install dependencies
 npm install
 
 // build the project 
-gulp
+webpack
 
 // start the npm server
 npm start
 ```
-
-## Progress
-
-### Milestone 1
-
-As part of the first milestone the whole project has been setup and a first mockup has been created.
-
-### Milestone 2
-
-Done
-
-### Milestone 3
-
-Done
-
-### Milestone 4
-
-TBD
