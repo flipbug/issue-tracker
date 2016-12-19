@@ -6,7 +6,6 @@
   "author": "Daniel Milenkovic",
   "license": "ISC",
   "scripts": {
-    "prestart": "webpack",
     "start": "node server.js"
   },
   "devDependencies": {
