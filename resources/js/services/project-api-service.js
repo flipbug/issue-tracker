@@ -3,7 +3,7 @@ import ApiService from './api-service.js';
 export default class ProjectApiService extends ApiService {
     constructor() {
         super();
-        this.api_url = 'http://zhaw-web3-issue-tracker-api.herokuapp.com/api/projects/';
+        this.api_url = 'https://zhaw-web3-issue-tracker-api.herokuapp.com/api/projects/';
     }
 
     get(success) {

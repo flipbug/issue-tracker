@@ -3924,7 +3924,7 @@
 
 	var _project2 = _interopRequireDefault(_project);
 
-	var _issue = __webpack_require__(34);
+	var _issue = __webpack_require__(26);
 
 	var _issue2 = _interopRequireDefault(_issue);
 
@@ -4069,15 +4069,15 @@
 
 	var _model2 = _interopRequireDefault(_model);
 
-	var _issue = __webpack_require__(34);
+	var _issue = __webpack_require__(26);
 
 	var _issue2 = _interopRequireDefault(_issue);
 
-	var _projectApiService = __webpack_require__(26);
+	var _projectApiService = __webpack_require__(34);
 
 	var _projectApiService2 = _interopRequireDefault(_projectApiService);
 
-	var _issueApiService = __webpack_require__(33);
+	var _issueApiService = __webpack_require__(27);
 
 	var _issueApiService2 = _interopRequireDefault(_issueApiService);
 
@@ -4246,11 +4246,13 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	var _model = __webpack_require__(25);
 
-	var _apiService = __webpack_require__(27);
+	var _model2 = _interopRequireDefault(_model);
 
-	var _apiService2 = _interopRequireDefault(_apiService);
+	var _issueApiService = __webpack_require__(27);
+
+	var _issueApiService2 = _interopRequireDefault(_issueApiService);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -4260,44 +4262,82 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var ProjectApiService = function (_ApiService) {
-	    _inherits(ProjectApiService, _ApiService);
+	var Issue = function (_Model) {
+	    _inherits(Issue, _Model);
 
-	    function ProjectApiService() {
-	        _classCallCheck(this, ProjectApiService);
+	    function Issue(object) {
+	        _classCallCheck(this, Issue);
 
-	        var _this = _possibleConstructorReturn(this, (ProjectApiService.__proto__ || Object.getPrototypeOf(ProjectApiService)).call(this));
+	        var _this = _possibleConstructorReturn(this, (Issue.__proto__ || Object.getPrototypeOf(Issue)).call(this));
 
-	        _this.api_url = 'http://zhaw-web3-issue-tracker-api.herokuapp.com/api/projects/';
+	        var defaultData = { id: 0, client_id: '', project_id: 0, priority: 0, title: '', due_date: '', done: false, project_client_id: 0 };
+	        var data = Object.assign({}, defaultData, object);
+
+	        _this.id = data.id;
+	        _this.client_id = data.client_id;
+	        _this.project_id = data.project_id;
+	        _this.project_client_id = data.project_client_id;
+	        _this.priority = data.priority;
+	        _this.title = data.title;
+	        _this.due_date = data.due_date;
+	        _this.done = data.done;
+
+	        _this.api = new _issueApiService2.default();
+
+	        if (!_this.id) {
+	            _this.id = 0;
+	        }
+
+	        if (!_this.client_id) {
+	            _this.client_id = _this.generateId();
+	        }
 	        return _this;
 	    }
 
-	    _createClass(ProjectApiService, [{
-	        key: 'get',
-	        value: function get(success) {
-	            _get(ProjectApiService.prototype.__proto__ || Object.getPrototypeOf(ProjectApiService.prototype), 'get', this).call(this, this.api_url, success);
+	    _createClass(Issue, [{
+	        key: 'toggleDone',
+	        value: function toggleDone(callback) {
+	            this.done = !this.done;
+	            console.log(this.done);
+	            this.save(callback);
 	        }
 	    }, {
-	        key: 'add',
-	        value: function add(project, success) {
-	            _get(ProjectApiService.prototype.__proto__ || Object.getPrototypeOf(ProjectApiService.prototype), 'add', this).call(this, this.api_url, project, success);
-	        }
-	    }, {
-	        key: 'update',
-	        value: function update(project, success) {
-	            _get(ProjectApiService.prototype.__proto__ || Object.getPrototypeOf(ProjectApiService.prototype), 'update', this).call(this, this.api_url + project.id, project, success);
+	        key: 'save',
+	        value: function save(callback) {
+	            if (this.id == 0) {
+	                var self = this;
+	                this.api.add(this, function (data) {
+	                    self.id = data.id;
+	                    if (callback) callback(self);
+	                });
+	            } else {
+	                this.api.update(this, callback);
+	            }
 	        }
 	    }, {
 	        key: 'delete',
-	        value: function _delete(project, success) {
-	            _get(ProjectApiService.prototype.__proto__ || Object.getPrototypeOf(ProjectApiService.prototype), 'delete', this).call(this, this.api_url + project.id, success);
+	        value: function _delete(callback) {
+	            this.api.delete(this, callback);
+	        }
+	    }, {
+	        key: 'toJson',
+	        value: function toJson() {
+	            return JSON.stringify({
+	                id: this.id,
+	                client_id: this.client_id,
+	                project_id: this.project_id,
+	                project_client_id: this.project_client_id,
+	                title: this.title,
+	                done: this.done,
+	                priority: this.priority,
+	                due_date: this.due_date });
 	        }
 	    }]);
 
-	    return ProjectApiService;
-	}(_apiService2.default);
+	    return Issue;
+	}(_model2.default);
 
-	exports.default = ProjectApiService;
+	exports.default = Issue;
 
 /***/ },
 /* 27 */
@@ -4311,9 +4351,74 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+	var _apiService = __webpack_require__(28);
+
+	var _apiService2 = _interopRequireDefault(_apiService);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var request = __webpack_require__(28);
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var IssueApiService = function (_ApiService) {
+	    _inherits(IssueApiService, _ApiService);
+
+	    function IssueApiService() {
+	        _classCallCheck(this, IssueApiService);
+
+	        var _this = _possibleConstructorReturn(this, (IssueApiService.__proto__ || Object.getPrototypeOf(IssueApiService)).call(this));
+
+	        _this.api_url = 'http://zhaw-web3-issue-tracker-api.herokuapp.com/api/project/';
+	        return _this;
+	    }
+
+	    _createClass(IssueApiService, [{
+	        key: 'get',
+	        value: function get(project_id, success) {
+	            _get(IssueApiService.prototype.__proto__ || Object.getPrototypeOf(IssueApiService.prototype), 'get', this).call(this, this.api_url + project_id + '/issues', success);
+	        }
+	    }, {
+	        key: 'add',
+	        value: function add(issue, success) {
+	            _get(IssueApiService.prototype.__proto__ || Object.getPrototypeOf(IssueApiService.prototype), 'add', this).call(this, this.api_url + issue.project_id + '/issues', issue, success);
+	        }
+	    }, {
+	        key: 'update',
+	        value: function update(issue, success) {
+	            _get(IssueApiService.prototype.__proto__ || Object.getPrototypeOf(IssueApiService.prototype), 'update', this).call(this, this.api_url + issue.project_id + '/issues/' + issue.id, issue, success);
+	        }
+	    }, {
+	        key: 'delete',
+	        value: function _delete(issue, success) {
+	            _get(IssueApiService.prototype.__proto__ || Object.getPrototypeOf(IssueApiService.prototype), 'delete', this).call(this, this.api_url + issue.project_id + '/issues/' + issue.id, success);
+	        }
+	    }]);
+
+	    return IssueApiService;
+	}(_apiService2.default);
+
+	exports.default = IssueApiService;
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var request = __webpack_require__(29);
 
 	var ApiService = function () {
 	    function ApiService() {
@@ -4369,7 +4474,7 @@
 	exports.default = ApiService;
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4386,10 +4491,10 @@
 	  root = this;
 	}
 
-	var Emitter = __webpack_require__(29);
-	var RequestBase = __webpack_require__(30);
-	var isObject = __webpack_require__(31);
-	var isFunction = __webpack_require__(32);
+	var Emitter = __webpack_require__(30);
+	var RequestBase = __webpack_require__(31);
+	var isObject = __webpack_require__(32);
+	var isFunction = __webpack_require__(33);
 
 	/**
 	 * Noop.
@@ -5406,7 +5511,7 @@
 
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -5575,13 +5680,13 @@
 
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module of mixed-in functions shared between node and client code
 	 */
-	var isObject = __webpack_require__(31);
+	var isObject = __webpack_require__(32);
 
 	/**
 	 * Expose `RequestBase`.
@@ -6016,7 +6121,7 @@
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports) {
 
 	/**
@@ -6035,7 +6140,7 @@
 
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6045,7 +6150,7 @@
 	 * @return {Boolean}
 	 * @api private
 	 */
-	var isObject = __webpack_require__(31);
+	var isObject = __webpack_require__(32);
 
 	function isFunction(fn) {
 	  var tag = isObject(fn) ? Object.prototype.toString.call(fn) : '';
@@ -6054,71 +6159,6 @@
 
 	module.exports = isFunction;
 
-
-/***/ },
-/* 33 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
-	var _apiService = __webpack_require__(27);
-
-	var _apiService2 = _interopRequireDefault(_apiService);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var IssueApiService = function (_ApiService) {
-	    _inherits(IssueApiService, _ApiService);
-
-	    function IssueApiService() {
-	        _classCallCheck(this, IssueApiService);
-
-	        var _this = _possibleConstructorReturn(this, (IssueApiService.__proto__ || Object.getPrototypeOf(IssueApiService)).call(this));
-
-	        _this.api_url = 'http://zhaw-web3-issue-tracker-api.herokuapp.com/api/project/';
-	        return _this;
-	    }
-
-	    _createClass(IssueApiService, [{
-	        key: 'get',
-	        value: function get(project_id, success) {
-	            _get(IssueApiService.prototype.__proto__ || Object.getPrototypeOf(IssueApiService.prototype), 'get', this).call(this, this.api_url + project_id + '/issues', success);
-	        }
-	    }, {
-	        key: 'add',
-	        value: function add(issue, success) {
-	            _get(IssueApiService.prototype.__proto__ || Object.getPrototypeOf(IssueApiService.prototype), 'add', this).call(this, this.api_url + issue.project_id + '/issues', issue, success);
-	        }
-	    }, {
-	        key: 'update',
-	        value: function update(issue, success) {
-	            _get(IssueApiService.prototype.__proto__ || Object.getPrototypeOf(IssueApiService.prototype), 'update', this).call(this, this.api_url + issue.project_id + '/issues/' + issue.id, issue, success);
-	        }
-	    }, {
-	        key: 'delete',
-	        value: function _delete(issue, success) {
-	            _get(IssueApiService.prototype.__proto__ || Object.getPrototypeOf(IssueApiService.prototype), 'delete', this).call(this, this.api_url + issue.project_id + '/issues/' + issue.id, success);
-	        }
-	    }]);
-
-	    return IssueApiService;
-	}(_apiService2.default);
-
-	exports.default = IssueApiService;
 
 /***/ },
 /* 34 */
@@ -6132,13 +6172,11 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _model = __webpack_require__(25);
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-	var _model2 = _interopRequireDefault(_model);
+	var _apiService = __webpack_require__(28);
 
-	var _issueApiService = __webpack_require__(33);
-
-	var _issueApiService2 = _interopRequireDefault(_issueApiService);
+	var _apiService2 = _interopRequireDefault(_apiService);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6148,82 +6186,44 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Issue = function (_Model) {
-	    _inherits(Issue, _Model);
+	var ProjectApiService = function (_ApiService) {
+	    _inherits(ProjectApiService, _ApiService);
 
-	    function Issue(object) {
-	        _classCallCheck(this, Issue);
+	    function ProjectApiService() {
+	        _classCallCheck(this, ProjectApiService);
 
-	        var _this = _possibleConstructorReturn(this, (Issue.__proto__ || Object.getPrototypeOf(Issue)).call(this));
+	        var _this = _possibleConstructorReturn(this, (ProjectApiService.__proto__ || Object.getPrototypeOf(ProjectApiService)).call(this));
 
-	        var defaultData = { id: 0, client_id: '', project_id: 0, priority: 0, title: '', due_date: '', done: false, project_client_id: 0 };
-	        var data = Object.assign({}, defaultData, object);
-
-	        _this.id = data.id;
-	        _this.client_id = data.client_id;
-	        _this.project_id = data.project_id;
-	        _this.project_client_id = data.project_client_id;
-	        _this.priority = data.priority;
-	        _this.title = data.title;
-	        _this.due_date = data.due_date;
-	        _this.done = data.done;
-
-	        _this.api = new _issueApiService2.default();
-
-	        if (!_this.id) {
-	            _this.id = 0;
-	        }
-
-	        if (!_this.client_id) {
-	            _this.client_id = _this.generateId();
-	        }
+	        _this.api_url = 'https://zhaw-web3-issue-tracker-api.herokuapp.com/api/projects/';
 	        return _this;
 	    }
 
-	    _createClass(Issue, [{
-	        key: 'toggleDone',
-	        value: function toggleDone(callback) {
-	            this.done = !this.done;
-	            console.log(this.done);
-	            this.save(callback);
+	    _createClass(ProjectApiService, [{
+	        key: 'get',
+	        value: function get(success) {
+	            _get(ProjectApiService.prototype.__proto__ || Object.getPrototypeOf(ProjectApiService.prototype), 'get', this).call(this, this.api_url, success);
 	        }
 	    }, {
-	        key: 'save',
-	        value: function save(callback) {
-	            if (this.id == 0) {
-	                var self = this;
-	                this.api.add(this, function (data) {
-	                    self.id = data.id;
-	                    if (callback) callback(self);
-	                });
-	            } else {
-	                this.api.update(this, callback);
-	            }
+	        key: 'add',
+	        value: function add(project, success) {
+	            _get(ProjectApiService.prototype.__proto__ || Object.getPrototypeOf(ProjectApiService.prototype), 'add', this).call(this, this.api_url, project, success);
+	        }
+	    }, {
+	        key: 'update',
+	        value: function update(project, success) {
+	            _get(ProjectApiService.prototype.__proto__ || Object.getPrototypeOf(ProjectApiService.prototype), 'update', this).call(this, this.api_url + project.id, project, success);
 	        }
 	    }, {
 	        key: 'delete',
-	        value: function _delete(callback) {
-	            this.api.delete(this, callback);
-	        }
-	    }, {
-	        key: 'toJson',
-	        value: function toJson() {
-	            return JSON.stringify({
-	                id: this.id,
-	                client_id: this.client_id,
-	                project_id: this.project_id,
-	                project_client_id: this.project_client_id,
-	                title: this.title,
-	                done: this.done,
-	                priority: this.priority,
-	                due_date: this.due_date });
+	        value: function _delete(project, success) {
+	            _get(ProjectApiService.prototype.__proto__ || Object.getPrototypeOf(ProjectApiService.prototype), 'delete', this).call(this, this.api_url + project.id, success);
 	        }
 	    }]);
 
-	    return Issue;
-	}(_model2.default);
+	    return ProjectApiService;
+	}(_apiService2.default);
 
-	exports.default = Issue;
+	exports.default = ProjectApiService;
 
 /***/ },
 /* 35 */
