@@ -1,0 +1,26 @@
+<projectcreate>
+    <div id="project-form">
+        <form onsubmit={submit}>
+            <div class="input-group search-box">
+                <input class="form-control form-control-lg" placeholder="New Project..." type="text" name="name"/>
+                <span class="input-group-btn">
+                    <input class="btn btn-lg btn-secondary" type="submit" value="Create"/>
+                </span>
+            </div>
+        </form>
+    </div>
+
+    <script>        
+        var actions = require('../js/actions.js');
+        var store = this.opts.store;
+        
+       submit(e) {
+            e.preventDefault()
+            if (this.name.value) {
+                store.dispatch(actions.addProject({name: this.name.value}));
+                store.dispatch(actions.toggleProjectForm());
+                this.name.value = '';
+            }
+        }
+    </script>
+</projectcreate>

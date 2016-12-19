@@ -1,0 +1,41 @@
+<issuecreate>
+    <div class="issue-form">
+        <form class="card card-block" onsubmit={ submit }>
+            <div class=" col-md-2">
+                <select class="form-control form-control" id="priority" name="prio">
+                    <option>Priority</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                </select>
+            </div>
+            <div class=" col-md-2">
+                <input type="date" class="form-control form-control datepicker" id="due_date" placeholder="Date">
+            </div>
+            <div class=" col-md-6">
+                <input type="text" class="form-control form-control" id="title" placeholder="Issue">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary pull-right" onclick={ submit }>Create</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        var actions = require('../js/actions.js');
+        var store = this.opts.store;
+        
+        submit(e) {
+            e.preventDefault();
+            if (this.priority.value && this.due_date.value && this.title.value) {
+                store.dispatch(actions.addIssue(this.opts.project, {
+                    priority: this.priority.value,
+                    title: this.title.value, 
+                    due_date: this.due_date.value 
+                }));
+                this.title.value = '';
+                this.due_date.value = '';
+            }
+        }
+    </script>
+</issuecreate>

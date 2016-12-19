@@ -1,0 +1,40 @@
+<projects>
+
+    <section class="content">
+        <div class="container">
+            <projectcreate if={ this.state.showProjectForm } store={ opts.store }></projectcreate>
+        </div>
+    </section>
+
+    <project project={ this.state.currentProject }  store={ opts.store }></project>
+
+    <script>
+
+        var actions = require('../js/actions.js');
+        var store = this.opts.store;
+        var projectRouter = riot.route.create();
+        var state = store.getState();
+
+        this.on('mount',function() {
+            store.dispatch(actions.loadProjects());
+        });
+
+        store.subscribe(function() {
+            this.state = store.getState();
+            console.log("state changed");
+            console.log(this.state);
+            this.update();
+        }.bind(this));
+
+        /*projectRouter('', function() {
+            if (state.projects.length > 0) {
+                store.dispatch(actions.switchProjectById(state.projects[0].id));
+            }
+        });
+
+        projectRouter('project/*', function(id) {
+            store.dispatch(actions.switchProjectById(id));
+        });*/
+    </script>
+
+</projects>

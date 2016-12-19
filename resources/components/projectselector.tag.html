@@ -1,0 +1,32 @@
+<projectselector>
+    <div class="projectselector">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Projects</button>
+        <div class="dropdown-menu">
+            <span class="dropdown-item" each="{ this.state.projects }">
+                <a href="#" onclick="{ switchProject }" data-id="{ id }">{ name }</a>
+            </span>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="project-form-toggle" onclick={ showCreate }>+ New Project</button>
+        </div>
+    </div>
+
+    <script>
+        var actions = require('../js/actions.js');
+        var store = this.opts.store;
+
+        showCreate() {
+            console.log("show project form");
+            store.dispatch(actions.toggleProjectForm());
+        }
+
+        switchProject(e) {
+            e.preventDefault();
+            store.dispatch(actions.switchProjectById(e.item.id));
+        }
+
+        store.subscribe(function() {
+            this.state = store.getState();
+            this.update();
+        }.bind(this));
+    </script>
+</projectselector>

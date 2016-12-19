@@ -1,0 +1,145 @@
+// Add custom font
+// @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700,300);
+
+// override bootstrap vars
+$font-family-base: 'Open Sans', sans-serif;
+$brand-primary: #36353B;
+$brand-secondary: #F7B99A;
+
+$enable-transitions: true;
+
+@import "bootstrap";
+
+// media queries
+$screen-md-max: 719px;
+
+
+// color definitions
+$dark-primary: #36353B;
+$light-primary: #FAFBFC;
+
+// general styles
+body {
+  background: $light-primary;
+}
+
+header {
+  margin-bottom: 1rem;
+
+  a {
+    color: $dark-primary;
+    &:hover {
+      color: darken($dark-primary, 20%);
+    }
+  }
+}
+
+h1 {
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+h2 {
+  margin-bottom: 1rem;
+  font-size: $font-size-h1;
+}
+
+h3 {
+  font-weight: 300;
+  padding-bottom: 0.5rem;
+}
+
+// header nav
+.navbar-brand {
+  display: block;
+  font-weight: bold;
+  opacity: 0.2;
+
+  &:hover {
+      opacity: 1;
+  }
+}
+
+
+.dropdown-menu {
+    left: auto;
+    right: 15px;
+}
+
+.projectselector.active {
+    .dropdown-menu {
+        display: block;
+    }
+}
+
+// content & issue form
+.content {
+  padding-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+#project-form {
+    margin-bottom: 1rem;
+}
+
+.issue-form .card {
+    background: $light-primary;
+    .btn {
+        width: 100%;
+    }
+
+    @media (max-width: $screen-md-max) { 
+        .form-control,
+        .btn {
+            margin-bottom: 20px 
+        }
+     }
+}
+
+// issues
+.issues {
+    .done {
+        opacity: 0.4;
+        &:hover {
+            opacity: 0.8;
+        } 
+    }
+}
+
+// footer
+footer {
+  background-color: $dark-primary;
+  color: $light-primary;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+
+  a {
+    color: $light-primary;
+    &:hover {
+      color: darken($light-primary, 20);
+      text-decoration: none;
+    }
+  }
+
+  nav {
+      float: right;
+
+      ul {
+          li {
+              list-style: none;
+              float:left;
+              padding-left: 20px; 
+          }
+      }
+  }
+}
+
+// helper
+.pull-right {
+    float: right;
+}
+
+.hidden {
+    display: none;
+}

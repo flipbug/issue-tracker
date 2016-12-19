@@ -1,0 +1,18 @@
+<project>
+    <section class="content">
+        <div class="container">
+            <h1 id="project-title">{ this.opts.project.name } <small>({ this.opts.project.id })</small></h1>
+
+            <issuecreate project={ this.opts.project } store={ this.opts.store }></issuecreate>
+        </div>
+    </section>
+
+    <section class="content container">
+        <div class="row">
+            <div class="col-sm-12">
+                <issueList issues={ this.opts.project.issues } project={ this.opts.project } store={ this.opts.store }></issuelist>
+            </div>
+        </div>
+    </section>
+    
+</project>

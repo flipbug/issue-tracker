@@ -1,0 +1,24 @@
+<issue>
+    <td><input type="checkbox" checked={ done } onchange={ toggleIssue }/></td>
+    <td>{ id }</td>
+    <td>{ priority }</td>
+    <td>{ title }</td>
+    <td>{ due_date }</td>
+    <td><button onclick={ removeIssue }><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+
+    <script>
+
+        var actions = require('../js/actions.js');
+        var project = this.parent.opts.project;
+        var store = this.parent.opts.store;
+
+        toggleIssue() {
+            store.dispatch(actions.toggleIssue(project, {id: this.id}));
+        }
+
+        removeIssue() {
+            store.dispatch(actions.removeIssue(project, {id: this.id}));
+        }
+        
+    </script>
+</issue>

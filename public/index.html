@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>issue tracker</title>
+    <link rel="stylesheet" href="dist/bundle.css">
+</head>
+
+<body class="app dashboard">
+
+    <header class="page-header">
+        <nav class="navbar container">
+            <div class="navbar-toggleable-xs">
+                <a class="navbar-brand" href="/">Issue Tracker</a>
+                <ul class="nav navbar-nav pull-right">
+                    <li class="nav-item">
+                        <projectselector></projectselector>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <projects></projects>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-6">
+                    <p>© Hello Footer</p>
+                </div>
+                <div class="col-xs-6">
+                    <nav class="pull-right">
+                        <ul>
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Impressum</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://use.fontawesome.com/c0e589a59c.js"></script>
+    <!-- Bootstrap requires jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js"></script>
+
+    <script src="dist/bundle.js"></script>
+
+</body>
+
+</html>
