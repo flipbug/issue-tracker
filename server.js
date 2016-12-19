@@ -5,6 +5,8 @@ const express = require('express'),
       riot = require('riot'),
       app = express();
 
+app.set('port', (process.env.PORT || 5000));
+
 app.use(morgan('dev'));
 app.use(express.static(__dirname + '/public'));
 // parse application/x-www-form-urlencoded
