@@ -3,6 +3,7 @@ module.exports = reducer;
 function reducer(state={projects: [], currentProject: {}, showProjectForm: false, projectLoaded: false}, action) {
     console.log("-- State --");
     console.log(action);
+    
     switch(action.type) {
         case 'PROJECTS_LOADED':
             state = Object.assign({}, state, {projects: action.data, projectLoaded: true});
@@ -27,6 +28,7 @@ function reducer(state={projects: [], currentProject: {}, showProjectForm: false
             break;
     }
 
+    // check if projects are already loaded, otherwise we would overwrite them
     if (state.projectLoaded) {
         persistLocalStorage(state);
     }

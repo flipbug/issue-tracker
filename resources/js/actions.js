@@ -87,18 +87,6 @@ function syncIssues(project) {
     }
 }
 
-function projectAdded(project) {
-    return {type:'PROJECT_ADDED', data: project}
-}
-
-function projectsLoaded(projects) {
-    return {type:'PROJECTS_LOADED', data: projects}
-}
-
-function projectUpdated(project) {
-    return {type:'PROJECT_UPDATED', data: project}
-}
-
 function switchProjectById(id) {
     return function(dispatch, getState) {
         console.log(getState());
@@ -114,6 +102,18 @@ function switchProject(project) {
         dispatch(syncIssues(project));
         dispatch(projectSwitch(project));
     }
+}
+
+function projectAdded(project) {
+    return {type:'PROJECT_ADDED', data: project}
+}
+
+function projectsLoaded(projects) {
+    return {type:'PROJECTS_LOADED', data: projects}
+}
+
+function projectUpdated(project) {
+    return {type:'PROJECT_UPDATED', data: project}
 }
 
 function projectSwitch(project) {

@@ -4015,18 +4015,6 @@
 	    };
 	}
 
-	function projectAdded(project) {
-	    return { type: 'PROJECT_ADDED', data: project };
-	}
-
-	function projectsLoaded(projects) {
-	    return { type: 'PROJECTS_LOADED', data: projects };
-	}
-
-	function projectUpdated(project) {
-	    return { type: 'PROJECT_UPDATED', data: project };
-	}
-
 	function switchProjectById(id) {
 	    return function (dispatch, getState) {
 	        console.log(getState());
@@ -4042,6 +4030,18 @@
 	        dispatch(syncIssues(project));
 	        dispatch(projectSwitch(project));
 	    };
+	}
+
+	function projectAdded(project) {
+	    return { type: 'PROJECT_ADDED', data: project };
+	}
+
+	function projectsLoaded(projects) {
+	    return { type: 'PROJECTS_LOADED', data: projects };
+	}
+
+	function projectUpdated(project) {
+	    return { type: 'PROJECT_UPDATED', data: project };
 	}
 
 	function projectSwitch(project) {
@@ -6352,6 +6352,7 @@
 
 	    console.log("-- State --");
 	    console.log(action);
+
 	    switch (action.type) {
 	        case 'PROJECTS_LOADED':
 	            state = Object.assign({}, state, { projects: action.data, projectLoaded: true });
@@ -6376,6 +6377,7 @@
 	            break;
 	    }
 
+	    // check if projects are already loaded, otherwise we would overwrite them
 	    if (state.projectLoaded) {
 	        persistLocalStorage(state);
 	    }
